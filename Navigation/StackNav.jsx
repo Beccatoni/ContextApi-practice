@@ -16,9 +16,10 @@ export const StackNavigation = () => {
 
 const {isLog} = useContext(AppContext);
 
+
     return(
        
-        <Stack.Navigator initialRouteName='Register'>
+        <Stack.Navigator initialRouteName='Profile'>
         { isLog ?
         (
           <>

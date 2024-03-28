@@ -2,6 +2,7 @@
 import React, { createContext, useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig'; 
+import { setItemAsync, getItemAsync, deleteItemAsync } from 'expo-secure-store';
 
 export const AppContext = createContext();
 
@@ -14,20 +15,22 @@ const ContextApi = ({ children }) => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       setUser(response.user.stsTokenManager.accessToken);
-      const userToken = response.user.stsTokenManager.accessToken
+      const userAccessToken = response.user.stsTokenManager.accessToken
+      setIsLog(true)
       try {
-        await AsynStorage.setItem('userToken', JSON.stringify(userToken));
-        setIsLog(true)
+        await setItemAsync('userToken', JSON.stringify(userAccessToken));
+        await setItemAsync('email', JSON.stringify(email))
+        
       } catch (error) {
         console.log(error);
-        setIsLog(false);
+        
       }
       
       console.log(response);
       return response.user; 
     } catch (error) {
       console.log(error);
-      return null;
+      setIsLog(false);
     }
   };
 
@@ -42,8 +45,15 @@ const ContextApi = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    setLogLevel(false)
+    await deleteItemAsync('useAccessToken')
+    await deleteItemAsync('email')
+    
+  }
+
   return (
-    <AppContext.Provider value={{ SignIn, SignUp, user, isLog }}>
+    <AppContext.Provider value={{ SignIn, SignUp, user, isLog, logout }}>
       {children}
     </AppContext.Provider>
   );

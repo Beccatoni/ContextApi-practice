@@ -12,6 +12,11 @@ const Login = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false)
+
+const passShow = () =>{
+      setShowPass(!showPass)
+}
 
 const ValidEmail = (email) => {
   const regEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,8 +72,9 @@ const ValidateForm = () =>{
       <View style={{ justifyContent: 'center', gap:20, alignItems: 'center',backgroundColor:'#7bc5ae', height:500, width:400, borderRadius:10 }}>
         <Text style={{ textAlign: 'center', padding: 10, fontSize: 20, fontWeight: 'bold' }}>Login Into your account</Text>
         <TextInput  activeOutlineColor={'#028c6a'}  right={<TextInput.Icon icon={'mail'} color={'#028c6a'} />} label={'Email'} mode='outlined' style={{ height: 50, width: 300, borderRadius: 8 }} onChangeText={setEmail} />
-        <TextInput secureTextEntry activeOutlineColor={'#028c6a'} label={'Password'} mode='outlined'style={{ height: 50, width: 300, borderRadius: 8 }} onChangeText={setPassword} 
-        right={<TextInput.Icon icon={'lock'} color={'#028c6a'} />} />
+        <TextInput secureTextEntry={!showPass} activeOutlineColor={'#028c6a'} label={'Password'} mode='outlined'style={{ height: 50, width: 300, borderRadius: 8 }} onChangeText={setPassword} 
+        right={<TextInput.Icon icon={showPass ? 'lock-off': 'lock' } onPress={passShow} color={'#028c6a'}
+         />} />
         <TouchableOpacity onPress={handlePress} style={{ backgroundColor: '#028c6a', borderRadius: 10, height: 40, width: 100,  }}>
           <Text style={{ textAlign: 'center', padding: 10, fontSize:16, fontWeight:'bold' }}>Sign In</Text>
         </TouchableOpacity>
